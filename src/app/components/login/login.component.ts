@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +13,7 @@ import { LoginUserDto } from '../../models/login-user.dto';
   selector: 'app-login',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -33,17 +35,25 @@ export class LoginComponent {
     password: ['', Validators.required],
   });
 
+  errorMessage: string | null = null;
+
   login(): void {
     if (this.form.valid) {
       this.authService.login(this.form.value as LoginUserDto).subscribe({
         next: (response) => {
           if (response.success) {
             this.router.navigate(['/dashboard']);
+          } else {
+            this.errorMessage = 'Login failed. Please check your credentials.';
           }
         },
         error: (err) => {
+          if (err.error && err.error.message) {
+            this.errorMessage = `Login failed: ${err.error.message}`;
+          } else {
+            this.errorMessage = 'Login failed: An unknown server error occurred.';
+          }
           console.error('Login failed', err);
-          // Here you would typically show an error message to the user
         },
       });
     }
