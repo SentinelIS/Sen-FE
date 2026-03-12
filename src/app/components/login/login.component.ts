@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { LoginUserDto } from '../../models/login-user.dto';
+import { ChatbotComponent } from '../chatbot/chatbot.component';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ import { LoginUserDto } from '../../models/login-user.dto';
     MatInputModule,
     MatButtonModule,
     RouterModule,
+    ChatbotComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

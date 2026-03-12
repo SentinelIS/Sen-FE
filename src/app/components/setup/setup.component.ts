@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { SetupDto } from '../../models/setup.dto';
+import { ChatbotComponent } from '../chatbot/chatbot.component';
 
 @Component({
   selector: 'app-setup',
@@ -20,6 +21,7 @@ import { SetupDto } from '../../models/setup.dto';
     MatInputModule,
     MatButtonModule,
     RouterModule,
+    ChatbotComponent,
   ],
   templateUrl: './setup.component.html',
   styleUrl: './setup.component.scss',

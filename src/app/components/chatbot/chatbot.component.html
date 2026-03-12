@@ -1,0 +1,40 @@
+<div class="chatbot-container">
+  <div class="chat-icon" (click)="toggleChat()">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="white"
+    >
+      <path
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+      ></path>
+    </svg>
+  </div>
+
+  <div class="chat-popup" *ngIf="showChat">
+    <div class="chat-header">
+      <h2>Mimo</h2>
+      <button class="close-btn" (click)="toggleChat()">&times;</button>
+    </div>
+    <div class="chat-messages">
+      <div
+        *ngFor="let message of messages"
+        class="message"
+        [ngClass]="{ user: message.sender === 'user', bot: message.sender === 'bot' }"
+      >
+        {{ message.text }}
+      </div>
+    </div>
+    <div class="chat-input">
+      <input
+        type="text"
+        [(ngModel)]="userInput"
+        (keyup.enter)="sendMessage()"
+        placeholder="Ask a question..."
+      />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>

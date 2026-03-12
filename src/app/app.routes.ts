@@ -18,5 +18,5 @@ export const routes: Routes = [
     component: CreateUserComponent,
     canActivate: [authGuard],
   },
-  { path: '', redirectTo: 'setup', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
