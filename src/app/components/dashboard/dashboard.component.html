@@ -1,14 +1,71 @@
-<app-navigation></app-navigation>
-<div class="container">
-  <mat-card *ngIf="user">
-    <mat-card-header>
-      <mat-card-title>Welcome, {{ user.firstname }} {{ user.surname }}</mat-card-title>
-      <mat-card-subtitle>{{ user.role }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>This is your dashboard. More features will be added soon.</p>
-    </mat-card-content>
-  </mat-card>
+<!-- Topbar -->
+<mat-toolbar class="dashboard-topbar">
+  <div class="topbar-content">
+    <!-- Logo -->
+    <img class="logo" src="/logo.svg" alt="Sentinel">
 
-  <app-create-user *ngIf="user && user.role === 'admin'"></app-create-user>
-</div>
+    <!-- Search bar -->
+    <div class="search-bar">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Search..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" class="search-input" />
+    </div>
+
+    <!-- Spacer -->
+    <span class="spacer"></span>
+
+    <!-- Profile Link -->
+    <a href="/profile" class="topbar-link">
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </a>
+
+    <!-- Chat Link -->
+    <a href="/chat" class="topbar-link">
+      <mat-icon>chat_bubble</mat-icon>
+      <span>Chat</span>
+    </a>
+
+    <!-- Notification Link -->
+    <a href="/notifications" class="topbar-link">
+      <mat-icon>notifications</mat-icon>
+      <span>Notifications</span>
+    </a>
+
+    <!-- Settings Link -->
+    <a href="/settings" class="topbar-link">
+      <mat-icon>settings</mat-icon>
+      <span>Settings</span>
+    </a>
+
+    <!-- Logout Button -->
+    <button mat-icon-button (click)="logout()" class="topbar-btn-logout" title="Logout">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <mat-nav-list class="nav-list">
+      <mat-list-item *ngFor="let item of navItems" class="nav-item">
+        <a [href]="item.route" mat-list-item>{{ item.label }}</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <div class="container">
+      <mat-card *ngIf="user">
+        <mat-card-header>
+          <mat-card-title>Welcome, {{ user.firstname }} {{ user.surname }}</mat-card-title>
+          <mat-card-subtitle>{{ user.role }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>This is your dashboard. More features will be added soon.</p>
+        </mat-card-content>
+      </mat-card>
+
+      <app-create-user *ngIf="user && user.role === 'admin'"></app-create-user>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
