@@ -55,15 +55,19 @@
 
   <mat-sidenav-content class="sidenav-content">
     <div class="container">
-      <mat-card *ngIf="user">
-        <mat-card-header>
-          <mat-card-title>Welcome, {{ user.firstname }} {{ user.surname }}</mat-card-title>
-          <mat-card-subtitle>{{ user.role }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Use this dashboard as your main workspace for company operations.</p>
-        </mat-card-content>
-      </mat-card>
+      <div class="welcome-row" *ngIf="user">
+        <app-profile-avatar [userId]="userId"></app-profile-avatar>
+
+        <mat-card class="welcome-card">
+          <mat-card-header>
+            <mat-card-title>Welcome, {{ user.firstname }} {{ user.surname }}</mat-card-title>
+            <mat-card-subtitle>{{ user.role }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Use this dashboard as your main workspace for company operations.</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
 
       <app-create-user *ngIf="user && user.role === 'admin'"></app-create-user>
       <app-asset-management></app-asset-management>

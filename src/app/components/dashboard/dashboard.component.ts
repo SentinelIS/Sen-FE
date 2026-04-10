@@ -15,6 +15,7 @@ import { NavigationComponent } from '../navigation/navigation.component';
 import { CreateUserComponent } from '../create-user/create-user.component';
 import { Router } from '@angular/router';
 import { AssetManagementComponent } from '../asset-management/asset-management.component';
+import { ProfileAvatarComponent } from '../profile-avatar/profile-avatar.component';
 
 interface NavItem {
   label: string;
@@ -39,6 +40,7 @@ interface NavItem {
     NavigationComponent,
     CreateUserComponent,
     AssetManagementComponent,
+    ProfileAvatarComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -47,6 +49,7 @@ export class DashboardComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   user = this.authService.getUser();
+  readonly userId = Number(this.user?.userId || 0);
 
   navItems: NavItem[] = [
     { label: 'Dashboard', route: '/dashboard' },

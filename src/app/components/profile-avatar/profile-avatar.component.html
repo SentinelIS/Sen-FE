@@ -1,0 +1,6 @@
+<button class="avatar-btn" type="button" (click)="openModal()" title="Upload or update profile picture">
+  <img *ngIf="hasImage && imageUrl; else cameraFallback" [src]="imageUrl" alt="Profile picture" />
+  <ng-template #cameraFallback>
+    <mat-icon>photo_camera</mat-icon>
+  </ng-template>
+</button>
