@@ -54,6 +54,7 @@ export class DashboardComponent {
 
   navItems: NavItem[] = [
     { label: 'Dashboard', route: '/dashboard' },
+    { label: 'Chat', route: '/chat' },
     { label: 'Risk Assessment', route: '/risk-assessment' },
     { label: 'Policies', route: '/policies' },
     { label: 'Compliance and Audit', route: '/compliance-audit' },

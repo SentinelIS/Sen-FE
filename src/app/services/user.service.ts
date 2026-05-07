@@ -21,4 +21,12 @@ export class UserService {
   getUserById(userId: number): Observable<UserDto> {
     return this.http.get<UserDto>(`${this.apiUrl}/${userId}`);
   }
+
+  searchInternalUsers(companyId: string): Observable<UserDto[]> {
+    return this.http.get<UserDto[]>(`${this.apiUrl}/internal`, { params: { companyId } });
+  }
+
+  searchExternalUsers(companyId: string): Observable<UserDto[]> {
+    return this.http.get<UserDto[]>(`${this.apiUrl}/external`, { params: { companyId } });
+  }
 }

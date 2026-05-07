@@ -1,0 +1,113 @@
+<div class="chat-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="goBack()" title="Back to Dashboard">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span>Chat</span>
+    </mat-toolbar>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search users...</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="searchQuery" 
+          (input)="onSearch()" 
+          placeholder="First name, surname or username"
+        >
+        <button *ngIf="searchQuery" matSuffix mat-icon-button (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-icon *ngIf="!searchQuery" matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Conversation/Search Results List -->
+    <mat-nav-list class="user-list">
+      <h3 mat-subheader *ngIf="isSearching">Search Results</h3>
+      <h3 mat-subheader *ngIf="!isSearching">Recent Conversations</h3>
+
+      <ng-container *ngIf="isSearching">
+        <mat-list-item 
+          *ngFor="let result of searchResults()" 
+          (click)="selectConversation(result)"
+          [class.active]="activeConversation()?.userId === result.userId"
+        >
+          <mat-icon matListItemIcon>person</mat-icon>
+          <div matListItemTitle class="user-title">
+            <span>{{ result.user?.firstname }} {{ result.user?.surname }}</span>
+            <mat-chip *ngIf="result.isExternal" class="external-chip" highlighted>External</mat-chip>
+          </div>
+          <span matListItemLine>{{ result.user?.role }}</span>
+        </mat-list-item>
+        <div *ngIf="searchResults().length === 0" class="no-results">
+          No users found.
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isSearching">
+        <mat-list-item 
+          *ngFor="let conv of conversations()" 
+          (click)="selectConversation(conv)"
+          [class.active]="activeConversation()?.userId === conv.userId"
+        >
+          <mat-icon matListItemIcon>person</mat-icon>
+          <div matListItemTitle class="user-title">
+            <span>{{ conv.user?.firstname }} {{ conv.user?.surname }}</span>
+            <mat-chip *ngIf="conv.isExternal" class="external-chip" highlighted>External</mat-chip>
+          </div>
+          <span matListItemLine>{{ conv.user?.role }}</span>
+        </mat-list-item>
+        <div *ngIf="conversations().length === 0" class="no-results">
+          No recent conversations.
+        </div>
+      </ng-container>
+    </mat-nav-list>
+  </div>
+
+  <!-- Chat Window -->
+  <div class="chat-window">
+    <ng-container *ngIf="activeConversation() as active; else noChat">
+      <mat-toolbar>
+        <span>{{ active.user?.firstname }} {{ active.user?.surname }}</span>
+        <mat-chip *ngIf="active.isExternal" class="external-chip-toolbar">External</mat-chip>
+      </mat-toolbar>
+
+      <div class="messages-container" #scrollContainer>
+        <div 
+          *ngFor="let msg of messages()" 
+          class="message-bubble"
+          [class.sent]="msg.senderId !== active.userId"
+          [class.received]="msg.senderId === active.userId"
+        >
+          <div class="content">{{ msg.content }}</div>
+          <div class="timestamp">{{ msg.timestamp | date:'shortTime' }}</div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <mat-form-field appearance="outline" class="message-input">
+          <input 
+            matInput 
+            [(ngModel)]="newMessage" 
+            placeholder="Type a message..." 
+            (keyup.enter)="sendMessage()"
+          >
+        </mat-form-field>
+        <button mat-fab color="primary" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #noChat>
+      <div class="no-chat-selected">
+        <mat-icon>chat</mat-icon>
+        <p>Select a conversation or search for a user to start chatting</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

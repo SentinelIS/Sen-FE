@@ -8,6 +8,7 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { ProfileComponent } from './components/profile/profile.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { AdminLoginComponent } from './components/admin/admin-login.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -15,6 +16,11 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'chat',
+    component: ChatComponent,
     canActivate: [authGuard],
   },
   {
