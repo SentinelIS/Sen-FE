@@ -20,20 +20,72 @@ html {
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
+  background-color: #f7f8fa;
   color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
+  font-family: Roboto, 'Segoe UI', sans-serif;
   margin: 0;
   height: 100%;
 }
-/* You can add global styles to this file, and also import other style files */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+
+.mat-toolbar {
+  --mat-toolbar-container-background-color: #ffffff;
+  --mat-toolbar-container-text-color: rgba(0, 0, 0, 0.87);
+  border-bottom: 1px solid #e6e8eb;
+}
+
+.mat-mdc-card {
+  border: 1px solid #e6e8eb;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1) !important;
+}
+
+.mat-mdc-card-header {
+  margin-bottom: 8px;
+}
+
+.mat-mdc-raised-button:not(:disabled) {
+  box-shadow: none !important;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-table {
+  background: #fff;
+}
+
+.mat-mdc-header-row {
+  background: #fafbfc;
+}
+
+.mat-mdc-header-cell {
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+}
+
+.mat-mdc-row:hover {
+  background: #f7faff;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #1a73e8;
+  outline-offset: 2px;
+}

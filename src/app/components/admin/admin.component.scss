@@ -1,6 +1,6 @@
 .admin-container {
-  padding: 20px;
-  max-width: 1200px;
+  padding: 24px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -8,11 +8,16 @@
   flex: 1 1 auto;
 }
 
+.admin-toolbar {
+  background: #fff;
+  border-bottom: 1px solid #e6e8eb;
+}
+
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .stats-card {
@@ -20,23 +25,32 @@
 }
 
 .stats-value {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #3f51b5;
-  padding: 10px 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a73e8;
+  padding: 6px 0;
 }
 
 .users-card {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .admin-section {
   display: block;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 table {
   width: 100%;
+}
+
+th.mat-mdc-header-cell {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+tr.mat-mdc-row:hover {
+  background: #f7faff;
 }
 
 .mat-column-actions {

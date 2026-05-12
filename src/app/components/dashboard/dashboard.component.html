@@ -1,56 +1,70 @@
 <!-- Topbar -->
 <mat-toolbar class="dashboard-topbar">
   <div class="topbar-content">
-    <!-- Logo -->
-    <img class="logo" src="/logo.svg" alt="Sentinel">
-
-    <!-- Search bar -->
-    <div class="search-bar">
-      <mat-icon>search</mat-icon>
-      <input type="text" placeholder="Search..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" class="search-input" />
+    <div class="topbar-leading">
+      <img class="logo" src="/logo.svg" alt="Sentinel" />
     </div>
 
-    <!-- Spacer -->
-    <span class="spacer"></span>
+    <div class="topbar-search">
+      <div class="search-bar">
+        <div class="search-bar-inner">
+          <mat-icon class="search-bar-icon" aria-hidden="true">search</mat-icon>
+          <input
+            type="text"
+            placeholder="Search..."
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()"
+            class="search-input"
+          />
+        </div>
+      </div>
+    </div>
 
-    <!-- Profile Link -->
-    <a routerLink="/profile" routerLinkActive="active" class="topbar-link">
-      <mat-icon>person</mat-icon>
-      <span>Profile</span>
-    </a>
+    <div class="topbar-actions">
+      <a routerLink="/profile" routerLinkActive="active" class="topbar-link">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </a>
 
-    <!-- Chat Link -->
-    <a routerLink="/chat" routerLinkActive="active" class="topbar-link">
-      <mat-icon>chat_bubble</mat-icon>
-      <span>Chat</span>
-    </a>
+      <a routerLink="/chat" routerLinkActive="active" class="topbar-link">
+        <mat-icon>chat_bubble</mat-icon>
+        <span>Chat</span>
+      </a>
 
-    <!-- Notification Link -->
-    <a routerLink="/notifications" routerLinkActive="active" class="topbar-link">
-      <mat-icon>notifications</mat-icon>
-      <span>Notifications</span>
-    </a>
+      <a routerLink="/notifications" routerLinkActive="active" class="topbar-link">
+        <mat-icon>notifications</mat-icon>
+        <span>Notifications</span>
+      </a>
 
-    <!-- Settings Link -->
-    <a routerLink="/settings" routerLinkActive="active" class="topbar-link">
-      <mat-icon>settings</mat-icon>
-      <span>Settings</span>
-    </a>
+      <a routerLink="/settings" routerLinkActive="active" class="topbar-link">
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </a>
 
-    <!-- Logout Button -->
-    <button mat-icon-button (click)="logout()" class="topbar-btn-logout" title="Logout">
-      <mat-icon>logout</mat-icon>
-    </button>
+      <button mat-icon-button (click)="logout()" class="topbar-btn-logout" title="Logout">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
   </div>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav mode="side" opened class="sidenav">
-    <mat-nav-list class="nav-list">
-      <mat-list-item *ngFor="let item of navItems" class="nav-item">
-        <a [routerLink]="item.route" routerLinkActive="active" mat-list-item>{{ item.label }}</a>
-      </mat-list-item>
-    </mat-nav-list>
+    <nav class="sidenav-inner" aria-label="Main">
+      <mat-nav-list class="nav-list">
+        <mat-list-item *ngFor="let item of navItems" class="nav-item">
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+            mat-list-item
+            class="nav-link"
+          >
+            {{ item.label }}
+          </a>
+        </mat-list-item>
+      </mat-nav-list>
+    </nav>
   </mat-sidenav>
 
   <mat-sidenav-content class="sidenav-content">
