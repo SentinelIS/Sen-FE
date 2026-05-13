@@ -5,6 +5,9 @@
       <mat-card-subtitle>Company {{ companyId }}</mat-card-subtitle>
     </div>
     <span class="spacer"></span>
+    <button mat-icon-button matTooltip="Add asset" (click)="$event.stopPropagation(); openCreateAssetDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
     <button mat-icon-button matTooltip="Download assets" (click)="$event.stopPropagation(); downloadAssets()">
       <mat-icon>download</mat-icon>
     </button>
@@ -18,21 +21,6 @@
   <mat-card-content *ngIf="!isManagementCollapsed">
     <p class="status" *ngIf="statusMessage">{{ statusMessage }}</p>
     <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
-
-    <h3>Create Asset</h3>
-    <div class="form-grid">
-      <input [(ngModel)]="createAssetModel.name" placeholder="Name*" />
-      <input [(ngModel)]="createAssetModel.type" placeholder="Type*" />
-      <input [(ngModel)]="createAssetModel.description" placeholder="Description" />
-      <input [(ngModel)]="createAssetModel.classification" placeholder="Classification" />
-      <input [(ngModel)]="createAssetModel.location" placeholder="Location" />
-      <input [(ngModel)]="createAssetModel.owner" placeholder="Owner" />
-      <input [(ngModel)]="createAssetModel.value" placeholder="Value" />
-      <input [(ngModel)]="createAssetModel.status" placeholder="Status" />
-      <input [(ngModel)]="createAssetModel.username" placeholder="Username*" />
-      <input [ngModel]="companyId" disabled placeholder="Company ID*" />
-    </div>
-    <button mat-raised-button color="primary" (click)="createAsset()">Create</button>
 
     <h3>Assets</h3>
     <div class="table-wrapper">
@@ -83,19 +71,6 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
-
-    <h3>Edit Asset <span *ngIf="selectedAssetId">#{{ selectedAssetId }}</span></h3>
-    <div class="form-grid">
-      <input [(ngModel)]="updateAssetModel.name" placeholder="Name" />
-      <input [(ngModel)]="updateAssetModel.type" placeholder="Type" />
-      <input [(ngModel)]="updateAssetModel.description" placeholder="Description" />
-      <input [(ngModel)]="updateAssetModel.classification" placeholder="Classification" />
-      <input [(ngModel)]="updateAssetModel.location" placeholder="Location" />
-      <input [(ngModel)]="updateAssetModel.owner" placeholder="Owner" />
-      <input [(ngModel)]="updateAssetModel.value" placeholder="Value" />
-      <input [(ngModel)]="updateAssetModel.status" placeholder="Status" />
-    </div>
-    <button mat-raised-button color="accent" (click)="updateAsset()">Update</button>
   </mat-card-content>
 </mat-card>
 

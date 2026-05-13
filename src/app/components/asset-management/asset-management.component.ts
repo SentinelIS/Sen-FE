@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { BaseChartDirective } from 'ng2-charts';
 import {
   AnalyticsByMonthItem,
@@ -20,6 +21,8 @@ import {
 } from '../../services/asset.service';
 import { AuthService } from '../../auth/auth.service';
 import { ChartConfiguration } from 'chart.js';
+import { CreateAssetDialogComponent } from './create-asset-dialog.component';
+import { EditAssetDialogComponent } from './edit-asset-dialog.component';
 
 @Component({
   selector: 'app-asset-management',
@@ -33,6 +36,7 @@ import { ChartConfiguration } from 'chart.js';
     MatTableModule,
     MatIconModule,
     MatTooltipModule,
+    MatDialogModule,
     BaseChartDirective,
   ],
   templateUrl: './asset-management.component.html',
@@ -41,6 +45,7 @@ import { ChartConfiguration } from 'chart.js';
 export class AssetManagementComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly assetService = inject(AssetService);
+  private readonly dialog = inject(MatDialog);
 
   readonly user = this.authService.getUser();
   readonly companyId = Number(this.user?.companyId || 0);
@@ -146,14 +151,27 @@ export class AssetManagementComponent implements OnInit {
     });
   }
 
-  createAsset(): void {
+  openCreateAssetDialog(): void {
+    const dialogRef = this.dialog.open(CreateAssetDialogComponent, {
+      width: '600px',
+      data: { ...this.createAssetModel },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.createAsset(result);
+      }
+    });
+  }
+
+  createAsset(payload: CreateAssetPayload): void {
     this.clearMessages();
-    if (!this.createAssetModel.name || !this.createAssetModel.type || !this.createAssetModel.username || !this.companyId) {
+    if (!payload.name || !payload.type || !payload.username || !payload.companyId) {
       this.errorMessage = 'Name, type, username and companyId are required.';
       return;
     }
 
-    this.assetService.createAsset(this.createAssetModel).subscribe({
+    this.assetService.createAsset(payload).subscribe({
       next: (res) => {
         this.statusMessage = `${res.message} (ID: ${res.assetId})`;
         this.loadAssets();
@@ -164,28 +182,38 @@ export class AssetManagementComponent implements OnInit {
   }
 
   startEdit(asset: Asset): void {
-    this.selectedAssetId = asset.asset_id;
-    this.updateAssetModel = {
-      name: asset.name || '',
-      type: asset.type || '',
-      description: asset.description || '',
-      classification: asset.classification || '',
-      location: asset.location || '',
-      owner: asset.owner || '',
-      value: asset.value || '',
-      status: asset.status || '',
-    };
+    const dialogRef = this.dialog.open(EditAssetDialogComponent, {
+      width: '600px',
+      data: {
+        id: asset.asset_id,
+        payload: {
+          name: asset.name || '',
+          type: asset.type || '',
+          description: asset.description || '',
+          classification: asset.classification || '',
+          location: asset.location || '',
+          owner: asset.owner || '',
+          value: asset.value || '',
+          status: asset.status || '',
+        },
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.updateAsset(asset.asset_id, result);
+      }
+    });
   }
 
-  updateAsset(): void {
+  updateAsset(id: number, payload: UpdateAssetPayload): void {
     this.clearMessages();
-    const id = Number(this.selectedAssetId);
     if (!id) {
       this.errorMessage = 'Please select an asset to edit.';
       return;
     }
 
-    this.assetService.updateAsset(id, this.updateAssetModel).subscribe({
+    this.assetService.updateAsset(id, payload).subscribe({
       next: (res) => {
         this.statusMessage = res.message;
         this.loadAssets();
