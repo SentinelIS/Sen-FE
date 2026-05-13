@@ -1,13 +1,15 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import * as signalR from '@microsoft/signalr';
 import { AuthService } from '../auth/auth.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
   private readonly authService = inject(AuthService);
+  private readonly http = inject(HttpClient);
   private connection: signalR.HubConnection | null = null;
   
   private messageReceivedSource = new Subject<{ senderId: number; content: string; timestamp: string }>();
@@ -15,6 +17,8 @@ export class ChatService {
 
   private messageSentSource = new Subject<any>();
   messageSent$ = this.messageSentSource.asObservable();
+
+  private readonly apiUrl = '/api/chat';
 
   async startConnection() {
     const token = this.authService.getToken();
@@ -60,5 +64,9 @@ export class ChatService {
       await this.connection.stop();
       this.connection = null;
     }
+  }
+
+  sendAsset(senderId: number, receiverId: number, assetId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/send-asset`, { senderId, receiverId, assetId });
   }
 }

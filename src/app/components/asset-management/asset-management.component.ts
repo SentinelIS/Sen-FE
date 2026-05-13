@@ -23,6 +23,8 @@ import { AuthService } from '../../auth/auth.service';
 import { ChartConfiguration } from 'chart.js';
 import { CreateAssetDialogComponent } from './create-asset-dialog.component';
 import { EditAssetDialogComponent } from './edit-asset-dialog.component';
+import { ShareAssetDialogComponent } from './share-asset-dialog.component';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-asset-management',
@@ -45,6 +47,7 @@ import { EditAssetDialogComponent } from './edit-asset-dialog.component';
 export class AssetManagementComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly assetService = inject(AssetService);
+  private readonly chatService = inject(ChatService);
   private readonly dialog = inject(MatDialog);
 
   readonly user = this.authService.getUser();
@@ -220,6 +223,33 @@ export class AssetManagementComponent implements OnInit {
         this.loadAnalytics();
       },
       error: (err) => this.handleError(err),
+    });
+  }
+
+  shareAsset(asset: Asset): void {
+    this.clearMessages();
+    const senderId = this.user?.userId;
+    const companyId = this.user?.companyId;
+
+    if (!senderId || !companyId) {
+      this.errorMessage = 'User information missing.';
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ShareAssetDialogComponent, {
+      width: '400px',
+      data: { asset, companyId },
+    });
+
+    dialogRef.afterClosed().subscribe((receiverId: number) => {
+      if (receiverId) {
+        this.chatService.sendAsset(senderId, receiverId, asset.asset_id).subscribe({
+          next: (res) => {
+            this.statusMessage = res.message || 'Asset shared successfully.';
+          },
+          error: (err) => this.handleError(err),
+        });
+      }
     });
   }
 

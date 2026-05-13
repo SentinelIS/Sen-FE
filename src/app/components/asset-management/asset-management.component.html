@@ -58,6 +58,9 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let asset">
+            <button mat-icon-button matTooltip="Share" (click)="shareAsset(asset)">
+              <mat-icon>ios_share</mat-icon>
+            </button>
             <button mat-icon-button matTooltip="Edit" (click)="startEdit(asset)">
               <mat-icon>edit</mat-icon>
             </button>
