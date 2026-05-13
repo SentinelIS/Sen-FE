@@ -1,6 +1,16 @@
 .asset-shell {
   margin: 16px 0;
   border-radius: 12px;
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
 
 .toolbar {

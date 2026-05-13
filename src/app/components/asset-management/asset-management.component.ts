@@ -50,6 +50,8 @@ export class AssetManagementComponent implements OnInit {
   selectedAssetId: number | null = null;
   statusMessage = '';
   errorMessage = '';
+  isAnalyticsCollapsed = false;
+  isManagementCollapsed = false;
 
   createAssetModel: CreateAssetPayload = {
     name: '',
@@ -206,6 +208,14 @@ export class AssetManagementComponent implements OnInit {
       },
       error: (err) => this.handleError(err),
     });
+  }
+
+  toggleAnalytics(): void {
+    this.isAnalyticsCollapsed = !this.isAnalyticsCollapsed;
+  }
+
+  toggleManagement(): void {
+    this.isManagementCollapsed = !this.isManagementCollapsed;
   }
 
   loadAnalytics(): void {
