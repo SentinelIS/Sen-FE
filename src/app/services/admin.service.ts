@@ -30,4 +30,12 @@ export class AdminService {
   resetPassword(userId: number, newPassword: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/users/${userId}/reset-password`, { newPassword });
   }
+
+  getChatReports(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/chat/reports`);
+  }
+
+  generatePassword(): Observable<{ password: string }> {
+    return this.http.get<{ password: string }>(`${this.apiUrl}/users/passwords/generate`);
+  }
 }

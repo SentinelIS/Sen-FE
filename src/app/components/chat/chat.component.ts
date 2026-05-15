@@ -11,9 +11,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription, forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ReportMessageDialogComponent } from './report-message-dialog.component';
 
 interface Conversation {
   userId: number;
@@ -23,6 +27,8 @@ interface Conversation {
 }
 
 interface Message {
+  id?: number;
+  MSG_ID?: number;
   senderId: number;
   content: string;
   timestamp: string;
@@ -41,6 +47,9 @@ interface Message {
     MatToolbarModule,
     MatFormFieldModule,
     MatChipsModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatSnackBarModule,
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
@@ -51,6 +60,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
@@ -188,7 +199,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   loadHistory(userId: number) {
     this.http.get<Message[]>(`http://localhost:5109/api/messages/history/${userId}`).subscribe({
       next: (history) => {
-        this.messages.set(history);
+        const mappedHistory = (history || []).map(msg => ({
+          ...msg,
+          id: msg.id || msg.MSG_ID
+        }));
+        this.messages.set(mappedHistory);
       },
       error: (err) => console.error('Error loading history', err)
     });
@@ -200,6 +215,45 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.chatService.sendMessage(active.userId, this.newMessage);
       this.newMessage = '';
     }
+  }
+
+  openReportDialog(msg: Message): void {
+    const messageId = msg.id || msg.MSG_ID;
+    if (!messageId) {
+      this.snackBar.open('Cannot report this message (Missing ID).', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ReportMessageDialogComponent, {
+      width: '400px',
+      data: { messageId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.submitReport(messageId, result.reason, result.details);
+      }
+    });
+  }
+
+  private submitReport(messageId: number, reason: string, details?: string): void {
+    const currentUser = this.authService.getUser();
+    if (!currentUser) return;
+
+    this.chatService.reportMessage({
+      messageId,
+      reporterId: Number(currentUser.userId),
+      reason,
+      details
+    }).subscribe({
+      next: () => {
+        this.snackBar.open('Report submitted successfully.', 'Close', { duration: 3000 });
+      },
+      error: (err) => {
+        console.error('Error reporting message', err);
+        this.snackBar.open('Failed to submit report.', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   goBack() {

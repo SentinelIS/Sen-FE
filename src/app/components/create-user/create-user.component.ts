@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { CreateUserDto } from '../../models/create-user.dto';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-create-user',
@@ -29,6 +30,7 @@ import { CreateUserDto } from '../../models/create-user.dto';
 export class CreateUserComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly adminService = inject(AdminService);
 
   @Output() userCreated = new EventEmitter<void>();
 
@@ -78,5 +80,19 @@ export class CreateUserComponent {
           },
         });
     }
+  }
+
+  generatePassword(): void {
+    this.adminService.generatePassword().subscribe({
+      next: (res) => {
+        this.form.patchValue({
+          password: res.password,
+          passwordRepeat: res.password,
+        });
+      },
+      error: (err) => {
+        console.error('Failed to generate password', err);
+      },
+    });
   }
 }

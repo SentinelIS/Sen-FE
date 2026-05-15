@@ -39,6 +39,10 @@
     </div>
 
     <div class="form-actions">
+      <button mat-stroked-button type="button" (click)="generatePassword()" style="margin-right: 8px;">
+        <mat-icon>vpn_key</mat-icon>
+        Generate Password
+      </button>
       <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
         <mat-icon>person_add</mat-icon>
         Create User

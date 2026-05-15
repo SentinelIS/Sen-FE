@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { CreateUserComponent } from '../create-user/create-user.component';
+import { ReportDetailsDialogComponent } from './report-details-dialog.component';
 
 @Component({
   selector: 'app-admin',
@@ -39,12 +40,30 @@ import { CreateUserComponent } from '../create-user/create-user.component';
 export class AdminComponent implements OnInit {
   private readonly adminService = inject(AdminService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
 
   users: AdminUserDto[] = [];
   stats?: AdminStatsDto;
+  chatReports: any[] = [];
+  userSearchQuery = '';
   displayedColumns: string[] = ['userId', 'username', 'firstname', 'surname', 'role', 'actions'];
+  reportColumns: string[] = ['timestamp', 'reporter', 'sender', 'reason', 'status', 'actions'];
   isCreateUserCollapsed = true;
   isUsersTableCollapsed = false;
+  isChatReportsCollapsed = false;
+
+  get filteredUsers(): AdminUserDto[] {
+    if (!this.userSearchQuery.trim()) {
+      return this.users;
+    }
+    const query = this.userSearchQuery.toLowerCase();
+    return this.users.filter((user) => {
+      const username = (user.USER_ABBR || user.username || '').toLowerCase();
+      const firstname = (user.USER_FIRST_NAME || user.firstname || '').toLowerCase();
+      const surname = (user.USER_SURNAME || user.surname || '').toLowerCase();
+      return username.includes(query) || firstname.includes(query) || surname.includes(query);
+    });
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -56,6 +75,10 @@ export class AdminComponent implements OnInit {
 
   toggleUsersTable(): void {
     this.isUsersTableCollapsed = !this.isUsersTableCollapsed;
+  }
+
+  toggleChatReports(): void {
+    this.isChatReportsCollapsed = !this.isChatReportsCollapsed;
   }
 
   loadData(): void {
@@ -81,6 +104,18 @@ export class AdminComponent implements OnInit {
     this.adminService.getStats().subscribe({
       next: (stats) => (this.stats = stats),
       error: (err) => this.showError('Failed to load statistics'),
+    });
+
+    this.adminService.getChatReports().subscribe({
+      next: (reports) => (this.chatReports = reports),
+      error: (err) => console.error('AdminPanel: Error loading reports:', err),
+    });
+  }
+
+  viewReportDetails(report: any): void {
+    this.dialog.open(ReportDetailsDialogComponent, {
+      width: '600px',
+      data: report,
     });
   }
 

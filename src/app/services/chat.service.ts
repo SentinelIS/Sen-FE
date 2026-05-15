@@ -69,4 +69,8 @@ export class ChatService {
   sendAsset(senderId: number, receiverId: number, assetId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/send-asset`, { senderId, receiverId, assetId });
   }
+
+  reportMessage(payload: { messageId: number; reporterId: number; reason: string; details?: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/report`, payload);
+  }
 }

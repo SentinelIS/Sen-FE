@@ -82,11 +82,23 @@
           class="message-bubble"
           [class.sent]="msg.senderId !== active.userId"
           [class.received]="msg.senderId === active.userId"
+          [matMenuTriggerFor]="msgMenu"
+          [matMenuTriggerData]="{ message: msg }"
+          style="cursor: pointer;"
         >
           <div class="content">{{ msg.content }}</div>
           <div class="timestamp">{{ msg.timestamp | date:'shortTime' }}</div>
         </div>
       </div>
+
+      <mat-menu #msgMenu="matMenu">
+        <ng-template matMenuContent let-message="message">
+          <button mat-menu-item (click)="openReportDialog(message)">
+            <mat-icon color="warn">report</mat-icon>
+            <span>Report Message</span>
+          </button>
+        </ng-template>
+      </mat-menu>
 
       <div class="input-area">
         <mat-form-field appearance="outline" class="message-input">
