@@ -1,34 +1,48 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Create New User</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="createUser()">
-      <mat-form-field>
+<div class="create-user-form">
+  <form [formGroup]="form" (ngSubmit)="createUser()">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput formControlName="username" />
+        <mat-icon matPrefix>alternate_email</mat-icon>
+        <input matInput formControlName="username" placeholder="e.g. jdoe" />
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Firstname</mat-label>
-        <input matInput formControlName="firstname" />
+        <mat-icon matPrefix>person_outline</mat-icon>
+        <input matInput formControlName="firstname" placeholder="e.g. John" />
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Surname</mat-label>
-        <input matInput formControlName="surname" />
+        <mat-icon matPrefix>person_outline</mat-icon>
+        <input matInput formControlName="surname" placeholder="e.g. Doe" />
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Role</mat-label>
-        <input matInput formControlName="role" />
+        <mat-icon matPrefix>badge</mat-icon>
+        <input matInput formControlName="role" placeholder="e.g. admin or user" />
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
         <input matInput formControlName="password" type="password" />
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Repeat Password</mat-label>
+        <mat-icon matPrefix>lock_clock</mat-icon>
         <input matInput formControlName="passwordRepeat" type="password" />
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Create User</button>
-    </form>
-  </mat-card-content>
-</mat-card>
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+        <mat-icon>person_add</mat-icon>
+        Create User
+      </button>
+    </div>
+  </form>
+</div>

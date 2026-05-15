@@ -43,9 +43,19 @@ export class AdminComponent implements OnInit {
   users: AdminUserDto[] = [];
   stats?: AdminStatsDto;
   displayedColumns: string[] = ['userId', 'username', 'firstname', 'surname', 'role', 'actions'];
+  isCreateUserCollapsed = true;
+  isUsersTableCollapsed = false;
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  toggleCreateUser(): void {
+    this.isCreateUserCollapsed = !this.isCreateUserCollapsed;
+  }
+
+  toggleUsersTable(): void {
+    this.isUsersTableCollapsed = !this.isUsersTableCollapsed;
   }
 
   loadData(): void {

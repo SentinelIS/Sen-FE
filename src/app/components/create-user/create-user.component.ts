@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Router, RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { CreateUserDto } from '../../models/create-user.dto';
 
@@ -19,6 +20,7 @@ import { CreateUserDto } from '../../models/create-user.dto';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
     RouterModule,
   ],
   templateUrl: './create-user.component.html',
@@ -27,7 +29,8 @@ import { CreateUserDto } from '../../models/create-user.dto';
 export class CreateUserComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
+
+  @Output() userCreated = new EventEmitter<void>();
 
   form = this.fb.group(
     {
@@ -66,7 +69,8 @@ export class CreateUserComponent {
         .subscribe({
           next: (response) => {
             if (response.success) {
-              this.router.navigate(['/dashboard']);
+              this.form.reset();
+              this.userCreated.emit();
             }
           },
           error: (err) => {
