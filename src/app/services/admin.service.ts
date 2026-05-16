@@ -38,4 +38,28 @@ export class AdminService {
   generatePassword(): Observable<{ password: string }> {
     return this.http.get<{ password: string }>(`${this.apiUrl}/users/passwords/generate`);
   }
+
+  getAdmins(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/admins`);
+  }
+
+  getCompanies(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/companies`);
+  }
+
+  getGrowthData(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/growth`);
+  }
+
+  getRoleDistribution(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/roles`);
+  }
+
+  getAdminRatio(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/analytics/admin-ratio`);
+  }
+
+  getCompanyDistribution(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/company-distribution`);
+  }
 }

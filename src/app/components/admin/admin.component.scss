@@ -102,58 +102,15 @@
     }
 
     .header-search {
-      flex: 0 0 200px;
+      flex: 0 0 220px;
       display: flex;
       justify-content: center;
 
       .search-field {
         width: 100%;
 
-        :host ::ng-deep .mat-mdc-form-field-wrapper {
-          padding-bottom: 0;
-        }
-
-        :host ::ng-deep .mat-mdc-text-field-wrapper {
-          height: 36px;
-          padding: 0 !important;
-          background: transparent !important;
-          
-          .mdc-notched-outline {
-            .mdc-notched-outline__leading {
-              border-radius: 18px 0 0 18px !important;
-              width: 18px !important;
-            }
-            .mdc-notched-outline__trailing {
-              border-radius: 0 18px 18px 0 !important;
-            }
-          }
-        }
-
-        :host ::ng-deep .mat-mdc-form-field-flex {
-          height: 36px;
-          align-items: center;
-          padding: 0 12px !important;
-        }
-
-        :host ::ng-deep .mat-mdc-form-field-infix {
-          padding: 0 !important;
-          min-height: auto;
-          display: flex;
-          align-items: center;
-        }
-        
-        :host ::ng-deep .mat-mdc-form-field-label-wrapper {
-          display: none;
-        }
-
-        :host ::ng-deep .mat-mdc-input-element {
-          font-size: 13px;
-          margin-top: 0;
-          height: 36px;
-        }
-
         mat-icon[matPrefix] {
-          margin-right: 8px;
+          margin: 0 6px 0 2px;
           font-size: 18px;
           width: 18px;
           height: 18px;
@@ -239,4 +196,151 @@ table {
 .action-buttons {
   display: flex;
   gap: 4px;
+}
+
+:host ::ng-deep .header-search .search-field {
+  --mdc-outlined-text-field-container-shape: 999px;
+  --mat-form-field-container-height: 32px;
+  --mat-form-field-container-vertical-padding: 4px;
+
+  .mat-mdc-text-field-wrapper {
+    height: 32px;
+    padding: 0 10px;
+    background: #fff;
+    border-radius: 999px;
+  }
+
+  .mat-mdc-form-field-flex {
+    height: 32px;
+    align-items: center;
+  }
+
+  .mat-mdc-form-field-infix {
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .mat-mdc-input-element {
+    height: 24px;
+    font-size: 13px;
+    line-height: 24px;
+  }
+
+  .mdc-notched-outline__leading {
+    width: 18px;
+    border-radius: 999px 0 0 999px;
+  }
+
+  .mdc-notched-outline__trailing {
+    border-radius: 0 999px 999px 0;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
+
+  .analytics-item {
+    background: #fff;
+    border: 1px solid #e6e8eb;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #475467;
+      margin-bottom: 16px;
+      margin-top: 0;
+    }
+
+    &.half {
+      grid-column: span 3;
+    }
+
+    &.one-third {
+      grid-column: span 2;
+    }
+
+    &.two-thirds {
+      grid-column: span 4;
+    }
+
+    &.wide {
+      grid-column: span 6;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 250px;
+      width: 100%;
+    }
+  }
+}
+
+.ratio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 20px;
+
+  .ratio-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .ratio-label {
+      font-size: 0.75rem;
+      color: #667085;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ratio-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #101828;
+    }
+  }
+
+  .ratio-divider {
+    font-size: 1.5rem;
+    color: #d0d5dd;
+    margin: 8px 0;
+  }
+
+  .ratio-percentage {
+    margin-top: 16px;
+    padding: 4px 12px;
+    background: #fef3f2;
+    color: #b42318;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    
+    .analytics-item.half,
+    .analytics-item.one-third,
+    .analytics-item.two-thirds,
+    .analytics-item.wide {
+      grid-column: span 1;
+    }
+  }
 }
