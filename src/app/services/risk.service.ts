@@ -25,4 +25,24 @@ export class RiskService {
   getAnalyticsByCategory(companyId: number): Observable<RiskAnalyticsByCategory[]> {
     return this.http.get<RiskAnalyticsByCategory[]>(`${this.apiUrl}/analytics/by-category?companyId=${companyId}`);
   }
+
+  getRiskMatrix(companyId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/matrix?companyId=${companyId}`);
+  }
+
+  getAnalyticsByTreatment(companyId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/by-treatment?companyId=${companyId}`);
+  }
+
+  getRiskScoreSummary(companyId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/analytics/score-summary?companyId=${companyId}`);
+  }
+
+  getOverdueReviews(companyId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/overdue?companyId=${companyId}`);
+  }
+
+  deleteRisk(riskId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${riskId}`);
+  }
 }

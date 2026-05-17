@@ -6,6 +6,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
 import { RiskDto } from '../../models/risk.dto';
 
 @Component({
@@ -19,6 +20,7 @@ import { RiskDto } from '../../models/risk.dto';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatSliderModule,
   ],
   template: `
     <h2 mat-dialog-title>Create New Risk</h2>
@@ -70,6 +72,30 @@ import { RiskDto } from '../../models/risk.dto';
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Treatment</mat-label>
+          <mat-select [(ngModel)]="data.treatment" required>
+            <mat-option value="accept">Accept</mat-option>
+            <mat-option value="mitigate">Mitigate</mat-option>
+            <mat-option value="transfer">Transfer</mat-option>
+            <mat-option value="avoid">Avoid</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="slider-container">
+          <label>Inherent Risk Score: {{ data.inherent_risk_score }}</label>
+          <mat-slider min="1" max="25" step="1" discrete>
+            <input matSliderThumb [(ngModel)]="data.inherent_risk_score">
+          </mat-slider>
+        </div>
+
+        <div class="slider-container">
+          <label>Residual Risk Score: {{ data.residual_risk_score }}</label>
+          <mat-slider min="1" max="25" step="1" discrete>
+            <input matSliderThumb [(ngModel)]="data.residual_risk_score">
+          </mat-slider>
+        </div>
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Description</mat-label>
           <textarea matInput [(ngModel)]="data.description" placeholder="Description" required></textarea>
@@ -78,7 +104,7 @@ import { RiskDto } from '../../models/risk.dto';
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button (click)="onNoClick()">Cancel</button>
-      <button mat-raised-button color="primary" [mat-dialog-close]="data" [disabled]="!data.title || !data.category || !data.impact || !data.likelihood || !data.status || !data.description">
+      <button mat-raised-button color="primary" [mat-dialog-close]="data" [disabled]="!isFormValid()">
         Create
       </button>
     </mat-dialog-actions>
@@ -92,6 +118,19 @@ import { RiskDto } from '../../models/risk.dto';
     }
     .full-width {
       grid-column: span 2;
+    }
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 4px;
+      label {
+        font-size: 0.75rem;
+        color: rgba(0, 0, 0, 0.6);
+      }
+      mat-slider {
+        width: 100%;
+      }
     }
     mat-form-field {
       width: 100%;
@@ -107,5 +146,21 @@ export class CreateRiskDialogComponent {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  isFormValid(): boolean {
+    return !!(
+      this.data.title &&
+      this.data.category &&
+      this.data.impact &&
+      this.data.likelihood &&
+      this.data.status &&
+      this.data.description &&
+      this.data.inherent_risk_score >= 1 &&
+      this.data.inherent_risk_score <= 25 &&
+      this.data.residual_risk_score >= 1 &&
+      this.data.residual_risk_score <= 25 &&
+      this.data.treatment
+    );
   }
 }

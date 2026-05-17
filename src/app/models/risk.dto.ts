@@ -3,11 +3,14 @@ export interface RiskDto {
   username: string;
   companyId: number;
   title: string;
-  category: 'cybersecurity' | 'compliance' | 'financial' | 'operational'; // Example categories, can be adjusted
+  category: 'cybersecurity' | 'compliance' | 'financial' | 'operational';
   impact: 'low' | 'medium' | 'high' | 'critical';
   likelihood: 'low' | 'medium' | 'high' | 'very high';
   status: 'identified' | 'assessed' | 'mitigated' | 'accepted' | 'closed';
   description: string;
+  inherent_risk_score: number;
+  residual_risk_score: number;
+  treatment: 'accept' | 'mitigate' | 'transfer' | 'avoid';
 }
 
 export interface RiskAnalyticsByCategory {

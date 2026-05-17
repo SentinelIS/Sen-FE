@@ -96,8 +96,16 @@ import { ControlDto } from '../../models/control.dto';
       <mat-card-content *ngIf="!isAnalyticsCollapsed">
         <div class="charts-grid">
           <div class="chart-card">
-            <h4>By Status</h4>
-            <canvas baseChart [data]="byStatusChartData" [type]="'doughnut'"></canvas>
+            <h4>Effectiveness</h4>
+            <canvas baseChart [data]="effectivenessChartData" [type]="'doughnut'"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>Automation Degree</h4>
+            <canvas baseChart [data]="automationChartData" [type]="'bar'" [options]="horizontalBarOptions"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>Framework Compliance</h4>
+            <canvas baseChart [data]="frameworkChartData" [type]="'radar'"></canvas>
           </div>
         </div>
       </mat-card-content>
@@ -130,7 +138,7 @@ import { ControlDto } from '../../models/control.dto';
     }
     .charts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 14px;
       margin-top: 16px;
     }
@@ -154,9 +162,24 @@ export class ControlManagementComponent implements OnInit {
   isAnalyticsCollapsed = false;
   readonly displayedColumns = ['control_id', 'name', 'category', 'status'];
 
-  byStatusChartData: ChartConfiguration<'doughnut'>['data'] = {
+  effectivenessChartData: ChartConfiguration<'doughnut'>['data'] = {
     labels: [],
-    datasets: [{ data: [], label: 'Controls by Status' }],
+    datasets: [{ data: [], label: 'Effectiveness', backgroundColor: ['#4caf50', '#f44336', '#ff9800'] }],
+  };
+
+  automationChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: [],
+    datasets: [{ data: [], label: 'Automation Degree', backgroundColor: '#1a73e8' }],
+  };
+
+  frameworkChartData: ChartConfiguration<'radar'>['data'] = {
+    labels: [],
+    datasets: [{ data: [], label: 'Framework Compliance' }],
+  };
+
+  horizontalBarOptions: ChartConfiguration<'bar'>['options'] = {
+    indexAxis: 'y',
+    responsive: true,
   };
 
   ngOnInit(): void {
@@ -171,13 +194,49 @@ export class ControlManagementComponent implements OnInit {
   }
 
   loadAnalytics(): void {
-    this.controlService.getAnalyticsByCategory(this.companyId).subscribe((res: any) => {
+    this.controlService.getAnalyticsByEffectiveness(this.companyId).subscribe((res: any) => {
       const data = Array.isArray(res) ? res : res.data || [];
-      this.byStatusChartData = {
-        labels: data.map((row: any) => row.category || row.key || row.status),
-        datasets: [{ data: data.map((row: any) => row.count), label: 'Controls by Status' }],
+      this.effectivenessChartData = {
+        labels: data.map((row: any) => row.key),
+        datasets: [{ 
+          data: data.map((row: any) => row.count), 
+          label: 'Effectiveness',
+          backgroundColor: data.map((row: any) => this.getEffectivenessColor(row.key))
+        }],
       };
     });
+
+    this.controlService.getAnalyticsByAutomation(this.companyId).subscribe((res: any) => {
+      const data = Array.isArray(res) ? res : res.data || [];
+      this.automationChartData = {
+        labels: data.map((row: any) => row.key),
+        datasets: [{ data: data.map((row: any) => row.count), label: 'Automation Degree', backgroundColor: '#1a73e8' }],
+      };
+    });
+
+    this.controlService.getAnalyticsByFramework(this.companyId).subscribe((res: any) => {
+      const data = Array.isArray(res) ? res : res.data || [];
+      this.frameworkChartData = {
+        labels: data.map((row: any) => row.key),
+        datasets: [{ 
+          data: data.map((row: any) => row.count), 
+          label: 'Framework Compliance',
+          fill: true,
+          backgroundColor: 'rgba(26, 115, 232, 0.2)',
+          borderColor: '#1a73e8',
+          pointBackgroundColor: '#1a73e8',
+        }],
+      };
+    });
+  }
+
+  getEffectivenessColor(key: string): string {
+    switch (key.toLowerCase()) {
+      case 'effective': return '#4caf50';
+      case 'ineffective': return '#f44336';
+      case 'testing': return '#ff9800';
+      default: return '#9e9e9e';
+    }
   }
 
   toggleManagement(): void { this.isManagementCollapsed = !this.isManagementCollapsed; }

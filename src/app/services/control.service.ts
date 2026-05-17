@@ -21,4 +21,16 @@ export class ControlService {
   getAnalyticsByCategory(companyId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/analytics/by-category?companyId=${companyId}`);
   }
+
+  getAnalyticsByEffectiveness(companyId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/by-effectiveness?companyId=${companyId}`);
+  }
+
+  getAnalyticsByAutomation(companyId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/by-automation?companyId=${companyId}`);
+  }
+
+  getAnalyticsByFramework(companyId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analytics/by-framework?companyId=${companyId}`);
+  }
 }
