@@ -21,6 +21,11 @@
     </div>
 
     <div class="topbar-actions">
+      <a routerLink="/home" routerLinkActive="active" class="topbar-link">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+      </a>
+
       <a routerLink="/profile" routerLinkActive="active" class="topbar-link">
         <mat-icon>person</mat-icon>
         <span>Profile</span>
@@ -60,6 +65,22 @@
             mat-list-item
             class="nav-link"
           >
+            {{ item.label }}
+          </a>
+        </mat-list-item>
+      </mat-nav-list>
+
+      <span class="spacer"></span>
+
+      <mat-nav-list class="nav-list bottom-list">
+        <mat-list-item *ngFor="let item of bottomNavItems" class="nav-item">
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            mat-list-item
+            class="nav-link"
+          >
+            <mat-icon matListItemIcon *ngIf="item.label === 'Admin'">settings</mat-icon>
             {{ item.label }}
           </a>
         </mat-list-item>

@@ -142,7 +142,7 @@ export class RiskDetailsDialogComponent {
     const payload = {
       riskId: this.data.risk_id,
       companyId: this.data.companyId || this.data.mysql?.COMP_ID,
-      notes: 'Bitte dieses Risiko prüfen.'
+      notes: 'Please review this risk.'
     };
 
     this.reviewService.createRiskReview(payload).subscribe({

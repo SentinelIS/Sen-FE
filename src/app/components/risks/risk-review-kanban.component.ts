@@ -60,6 +60,13 @@ import { AuthService } from '../../auth/auth.service';
     </div>
   `,
   styles: [`
+    .kanban-header {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      margin-bottom: 8px;
+    }
+    .spacer { flex: 1 1 auto; }
     .kanban-board {
       display: flex;
       gap: 16px;

@@ -60,12 +60,15 @@ export class DashboardComponent {
   readonly username = this.user?.username || '';
 
   navItems: NavItem[] = [
-    { label: 'Dashboard', route: '/dashboard' },
-    { label: 'Chat', route: '/chat' },
+    { label: 'Asset Management', route: '/asset-management' },
     { label: 'Risk Assessment', route: '/risk-assessment' },
+    { label: 'Controls', route: '/controls' },
     { label: 'Policies', route: '/policies' },
     { label: 'Compliance and Audit', route: '/compliance-audit' },
     { label: 'Incident-Management', route: '/incident-management' },
+  ];
+
+  bottomNavItems: NavItem[] = [
     { label: 'Admin', route: '/admin-login' },
   ];
 
