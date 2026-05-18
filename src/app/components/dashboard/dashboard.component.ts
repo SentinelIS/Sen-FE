@@ -17,6 +17,7 @@ import { AssetManagementComponent } from '../asset-management/asset-management.c
 import { ProfileAvatarComponent } from '../profile-avatar/profile-avatar.component';
 import { RiskManagementComponent } from '../risks/risk-management.component';
 import { ControlManagementComponent } from '../controls/control-management.component';
+import { RiskReviewKanbanComponent } from '../risks/risk-review-kanban.component';
 
 interface NavItem {
   label: string;
@@ -43,6 +44,7 @@ interface NavItem {
     ProfileAvatarComponent,
     RiskManagementComponent,
     ControlManagementComponent,
+    RiskReviewKanbanComponent,
     RouterLink,
     RouterLinkActive,
   ],

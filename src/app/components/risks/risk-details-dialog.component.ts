@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { RiskReviewService } from '../../services/risk-review.service';
 
 @Component({
   selector: 'app-risk-details-dialog',
@@ -16,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatDividerModule,
     MatChipsModule,
     MatIconModule,
+    MatSnackBarModule,
   ],
   template: `
     <h2 mat-dialog-title class="details-title">
@@ -83,6 +86,7 @@ import { MatIconModule } from '@angular/material/icon';
       </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
+      <button mat-button color="accent" (click)="requestReview()">Request Review</button>
       <button mat-raised-button color="primary" (click)="close()">Close</button>
     </mat-dialog-actions>
   `,
@@ -127,9 +131,29 @@ import { MatIconModule } from '@angular/material/icon';
 export class RiskDetailsDialogComponent {
   readonly data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<RiskDetailsDialogComponent>);
+  private readonly reviewService = inject(RiskReviewService);
+  private readonly snackBar = inject(MatSnackBar);
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  requestReview(): void {
+    const payload = {
+      riskId: this.data.risk_id,
+      companyId: this.data.companyId || this.data.mysql?.COMP_ID,
+      notes: 'Bitte dieses Risiko prüfen.'
+    };
+
+    this.reviewService.createRiskReview(payload).subscribe({
+      next: () => {
+        this.snackBar.open('Review requested successfully', 'Close', { duration: 3000 });
+        this.close();
+      },
+      error: (err) => {
+        this.snackBar.open('Failed to request review: ' + err.message, 'Close', { duration: 5000 });
+      }
+    });
   }
 
   getImpactColor(impact: string): string {
