@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RiskReviewDto, CreateRiskReviewPayload, UpdateRiskReviewStatusPayload } from '../models/risk-review.dto';
+import { RiskReviewDto, CreateRiskReviewPayload, UpdateRiskReviewStatusPayload, RiskReviewCommentDto } from '../models/risk-review.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -20,5 +20,9 @@ export class RiskReviewService {
 
   updateReviewStatus(reviewId: number, payload: UpdateRiskReviewStatusPayload): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${reviewId}/status`, payload);
+  }
+
+  addComment(reviewId: number, userAbbr: string, content: string): Observable<RiskReviewCommentDto> {
+    return this.http.post<RiskReviewCommentDto>(`${this.apiUrl}/${reviewId}/comments`, { userAbbr, content });
   }
 }

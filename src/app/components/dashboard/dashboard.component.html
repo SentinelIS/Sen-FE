@@ -111,10 +111,19 @@
       <app-risk-management [companyId]="companyId" [username]="username"></app-risk-management>
 
       <h2 class="section-header">Risk Reviews</h2>
-      <app-risk-review-kanban [companyId]="companyId"></app-risk-review-kanban>
+      <app-risk-review-kanban [companyId]="companyId" (reviewSelected)="onReviewSelected($event)"></app-risk-review-kanban>
 
       <h2 class="section-header">Controls</h2>
       <app-control-management [companyId]="companyId" [username]="username"></app-control-management>
     </div>
   </mat-sidenav-content>
+
+  <mat-sidenav #rightDrawer position="end" mode="over" class="right-drawer">
+    <app-risk-review-details
+      [review]="selectedReview"
+      (reviewUpdated)="onReviewUpdated()"
+      (close)="closeRightDrawer()">
+    </app-risk-review-details>
+  </mat-sidenav>
+
 </mat-sidenav-container>

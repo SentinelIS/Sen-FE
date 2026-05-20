@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   CdkDragDrop,
@@ -41,7 +41,7 @@ import { AuthService } from '../../auth/auth.service';
           class="item-list"
           (cdkDropListDropped)="drop($event)"
         >
-          <mat-card *ngFor="let item of column.items" cdkDrag class="kanban-card">
+          <mat-card *ngFor="let item of column.items" cdkDrag class="kanban-card" (click)="onCardClick(item)">
             <mat-card-header>
               <mat-card-title>Risk #{{ item.RISK_ID }}</mat-card-title>
               <mat-card-subtitle *ngIf="item.REVIEWER_ABBR">
@@ -111,10 +111,15 @@ import { AuthService } from '../../auth/auth.service';
     }
     .kanban-card {
       margin-bottom: 8px;
-      cursor: grab;
+      cursor: pointer;
       border: 1px solid #e6e8eb;
       box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
       &:active { cursor: grabbing; }
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+        transform: translateY(-2px);
+      }
     }
     .notes {
       font-size: 0.85rem;
@@ -146,6 +151,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class RiskReviewKanbanComponent implements OnInit {
   @Input() companyId!: number;
+  @Output() reviewSelected = new EventEmitter<RiskReviewDto>();
 
   private readonly reviewService = inject(RiskReviewService);
   private readonly authService = inject(AuthService);
@@ -161,6 +167,10 @@ export class RiskReviewKanbanComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadReviews();
+  }
+
+  onCardClick(review: RiskReviewDto): void {
+    this.reviewSelected.emit(review);
   }
 
   loadReviews(): void {

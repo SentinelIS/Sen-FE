@@ -1,3 +1,11 @@
+export interface RiskReviewCommentDto {
+  comment_id?: number;
+  review_id: number;
+  user_abbr: string;
+  content: string;
+  created_at: string;
+}
+
 export interface RiskReviewDto {
   REVIEW_ID?: number;
   RISK_ID: number;
@@ -7,6 +15,7 @@ export interface RiskReviewDto {
   REVIEWER_ID?: number | null;
   REVIEWER_ABBR?: string | null;
   riskTitle?: string; // Optional field for UI convenience
+  comments?: RiskReviewCommentDto[];
 }
 
 export interface CreateRiskReviewPayload {

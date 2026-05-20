@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 import { MatCardModule } from '@angular/material/card';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +18,8 @@ import { ProfileAvatarComponent } from '../profile-avatar/profile-avatar.compone
 import { RiskManagementComponent } from '../risks/risk-management.component';
 import { ControlManagementComponent } from '../controls/control-management.component';
 import { RiskReviewKanbanComponent } from '../risks/risk-review-kanban.component';
+import { RiskReviewDetailsComponent } from '../risks/risk-review-details.component';
+import { RiskReviewDto } from '../../models/risk-review.dto';
 
 interface NavItem {
   label: string;
@@ -45,6 +47,7 @@ interface NavItem {
     RiskManagementComponent,
     ControlManagementComponent,
     RiskReviewKanbanComponent,
+    RiskReviewDetailsComponent,
     RouterLink,
     RouterLinkActive,
   ],
@@ -58,6 +61,10 @@ export class DashboardComponent {
   readonly userId = Number(this.user?.userId || 0);
   readonly companyId = Number(this.user?.companyId || 1);
   readonly username = this.user?.username || '';
+
+  @ViewChild('rightDrawer') rightDrawer!: MatSidenav;
+  @ViewChild(RiskReviewKanbanComponent) kanbanBoard!: RiskReviewKanbanComponent;
+  selectedReview: RiskReviewDto | null = null;
 
   navItems: NavItem[] = [
     { label: 'Asset Management', route: '/asset-management' },
@@ -77,6 +84,32 @@ export class DashboardComponent {
   onSearch(): void {
     // Handle search functionality
     console.log('Searching for:', this.searchQuery);
+  }
+
+  onReviewSelected(review: RiskReviewDto): void {
+    this.selectedReview = review;
+    this.rightDrawer.open();
+  }
+
+  onReviewUpdated(): void {
+    if (this.kanbanBoard) {
+      this.kanbanBoard.loadReviews();
+    }
+    // Update the selectedReview object if it exists to refresh details view
+    if (this.selectedReview?.REVIEW_ID) {
+      // Find the updated review in the kanban items after they load
+      // Alternatively, we can just update the local object properties
+      const user = this.authService.getUser();
+      if (user) {
+        this.selectedReview.REVIEWER_ID = Number(user.userId);
+        this.selectedReview.REVIEWER_ABBR = (user.firstname[0] + user.surname).toUpperCase();
+      }
+    }
+  }
+
+  closeRightDrawer(): void {
+    this.rightDrawer.close();
+    this.selectedReview = null;
   }
 
   logout(): void {
